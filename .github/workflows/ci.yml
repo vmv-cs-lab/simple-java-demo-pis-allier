@@ -1,0 +1,29 @@
+
+name: Java CI Simple
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Download JUnit platform standalone
+      run: |
+        curl -L -o junit-platform-console-standalone-1.8.2.jar \
+        https://search.maven.org/remotecontent?filepath=org/junit/platform/junit-platform-console-standalone/1.8.2/junit-platform-console-standalone-1.8.2.jar
+
+    - name: Compile
+      run: |
+        javac -cp .:junit-platform-console-standalone-1.8.2.jar src/*.java
+
+    - name: Run tests
+      run: |
+        java -jar junit-platform-console-standalone-1.8.2.jar \
+        --classpath src \
+        --select-class AppTest
